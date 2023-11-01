@@ -48,6 +48,6 @@ jobs:
         run: ls -lhrt
       - name: 'Create release'
         uses: softprops/action-gh-release@v1
-        prerelease: ${{ contains(github.event.ref, '-') }}
         with:
+          prerelease: ${{ contains(github.event.ref, '-') }}
           files: sandbox-rust-ci-x86_64-unknown-linux-gnu.tar.gz
