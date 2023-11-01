@@ -1,3 +1,3 @@
 fn main() {
-    println!("v0.2.1-rc.2");
+    println!("v0.2.1");
 }
