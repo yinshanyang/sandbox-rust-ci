@@ -1,4 +1,4 @@
-name: 'Build'
+name: Build
 
 permissions:
   contents: write
@@ -12,20 +12,20 @@ on:
 
 jobs:
   build:
-    name: 'Build binary'
-    runs-on: 'ubuntu-latest'
+    name: Build binary
+    runs-on: ubuntu-latest
     steps:
-      - name: 'Check out the repo'
+      - name: Check out the repo
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: 'Build binary'
+      - name: Build binary
         run: cargo build --release --target=x86_64-unknown-linux-gnu
-      - name: 'Create archive'
+      - name: Create archive
         run: |
           mv target/x86_64-unknown-linux-gnu/release/sandbox-rust-ci .
           tar -czf sandbox-rust-ci-x86_64-unknown-linux-gnu.tar.gz sandbox-rust-ci
-      - name: 'Upload artifacts'
+      - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: sandbox-rust-ci-x86_64-unknown-linux-gnu.tar.gz
@@ -34,19 +34,19 @@ jobs:
   release:
     needs: build
     if: startsWith(github.event.ref, 'refs/tags/v')
-    name: 'Release'
-    runs-on: 'ubuntu-latest'
+    name: Release
+    runs-on: ubuntu-latest
     steps:
-      - name: 'Check out (for a working directory)'
+      - name: Check out (for a working directory)
         uses: actions/checkout@v3
-      - name: 'Download artifacts'
+      - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
           name: sandbox-rust-ci-x86_64-unknown-linux-gnu.tar.gz
-      - name: 'List files'
+      - name: List files
         shell: bash
         run: ls -lhrt
-      - name: 'Create release'
+      - name: Create release
         uses: softprops/action-gh-release@v1
         with:
           prerelease: ${{ contains(github.event.ref, '-') }}
